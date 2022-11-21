@@ -2,46 +2,29 @@ package service;
 
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import model.Animal;
-
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-
 public class AnimalSerializer {
-
-    private static String pachToTheFile = "src/main/resources/animal.json";
-
-    public void serialize(Animal animal) {
-
-        JsonMapper jsonMapper = new JsonMapper();
-
-        try {
-            jsonMapper.writeValue(new File(pachToTheFile), animal);
-        } catch (IOException e) {
-            System.out.println("cannot create file !");
-            e.printStackTrace();
-        }
-    }
+    private final JsonMapper jsonMapper = new JsonMapper();
+    private final String path = "src/main/resources/animal.json";
 
     public void serialize(List<Animal> animals) {
-        JsonMapper jsonMapper = new JsonMapper();
+
         try {
-            jsonMapper.writeValue(new File(pachToTheFile), animals);
+            jsonMapper.writeValue(new File(path), animals);
         } catch (IOException e) {
             System.out.println("cannot create file !");
-            e.printStackTrace();
         }
     }
+    public List<Animal> deserialize() {
 
-    public Optional<Animal> deserialize() {
-        JsonMapper jsonMapper = new JsonMapper();
         try {
-            return Optional.of(jsonMapper.readValue(new File(pachToTheFile), Animal.class));
+                return List.of(jsonMapper.readValue(new File(path), Animal[].class));
         } catch (IOException e) {
             System.out.println("Cannot read file");
-            e.printStackTrace();
-            return Optional.empty();
         }
+        return Collections.emptyList();
     }
 }
